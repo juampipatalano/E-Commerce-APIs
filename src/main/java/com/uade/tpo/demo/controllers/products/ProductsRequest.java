@@ -7,7 +7,7 @@ public class ProductsRequest {
     private int id;
     private String name;
     private String description;
-    private Category category;
+    private Long categoryId; // <-- solo el ID, luego busco dentro del controller a la categoria
     private Double price;
     private Integer stock;
     private String imageUrl;

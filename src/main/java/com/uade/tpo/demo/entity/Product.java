@@ -38,7 +38,7 @@ public class Product {
     @Column
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 

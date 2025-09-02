@@ -35,6 +35,9 @@ public class ProductsController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private CategoryService categoryService; //Creo que es una negrada hacer esto, pero bueno.
+
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(
         @RequestParam(required = false) Integer page,
@@ -58,13 +61,18 @@ public class ProductsController {
     @PostMapping
     public ResponseEntity<Object> createProduct(@RequestBody ProductsRequest productsRequest)
             throws ProductDuplicateException{
+        //Aca aplico la negrada que dije antes
+        Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
         Product result = productService.createProduct(productsRequest.getName(), 
                                                     productsRequest.getDescription(), 
-                                                    productsRequest.getCategory(),
+                                                    category,
                                                     productsRequest.getPrice(), 
                                                     productsRequest.getStock(), 
                                                     productsRequest.getImageUrl());
 
+        
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
@@ -94,12 +102,16 @@ public class ProductsController {
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
         throws ProductNotFoundException {
+        //Aplico la negrada una vez mas
+        Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
         Optional<Product> result = productService.getProductById(productId);
         if (result.isPresent()) {
             Product updatedProduct = productService.updateProduct(productId,
                                                                 productsRequest.getName(), 
                                                                 productsRequest.getDescription(), 
-                                                                productsRequest.getCategory(),
+                                                                category,
                                                                 productsRequest.getPrice(), 
                                                                 productsRequest.getStock(), 
                                                                 productsRequest.getImageUrl());
