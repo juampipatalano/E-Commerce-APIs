@@ -2,6 +2,8 @@ package com.uade.tpo.demo.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +34,6 @@ public class Category {
     private String description;
 
     @OneToMany (mappedBy = "category")
+    @JsonManagedReference
     private List<Product> products;  //TODO: cuando se crea un producto se debe guardar en esta tabla apuntando a su correspondiente categoría
 }

@@ -29,13 +29,12 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                
-                                .requestMatchers("/cart/**").hasRole("USER")
+                                .requestMatchers("/**").permitAll()
+                                /*                                 .requestMatchers("/cart/**").hasRole("USER")
                                 //CATEGORIAS
                                 
                                 .requestMatchers(HttpMethod.POST, "/categories").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA
-
+                                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll() //permite visualizar categorías sin autenticación
 
                                 //PRODUCTOS
                                 .requestMatchers(HttpMethod.POST, "/products").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA (igual poniendolo asi tampoco funciona, me voy a matar)
@@ -43,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/products/{id}").permitAll() //permite visualizar detalles de un producto sin autenticación
                                 .requestMatchers(HttpMethod.PUT, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de productos
                                 .requestMatchers(HttpMethod.DELETE, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
+                                */
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
