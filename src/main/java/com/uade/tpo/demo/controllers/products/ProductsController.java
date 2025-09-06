@@ -76,7 +76,7 @@ public class ProductsController {
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
-    @GetMapping("/category/{categoryId}/products")
+    @GetMapping("/categories/{categoryId}/products")
     public ResponseEntity<Page<Product>> getProductsByCategory(
         @RequestParam(required = false) Integer page,
         @RequestParam(required = false) Integer size,

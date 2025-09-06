@@ -48,6 +48,8 @@ public class SecurityConfig {
                                 */
                                 .requestMatchers(HttpMethod.POST, "/products").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/products").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
