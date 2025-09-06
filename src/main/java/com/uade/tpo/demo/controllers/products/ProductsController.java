@@ -36,7 +36,7 @@ public class ProductsController {
     private ProductService productService;
 
     @Autowired
-    private CategoryService categoryService; //Creo que es una negrada hacer esto, pero bueno.
+    private CategoryService categoryService; 
 
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(
@@ -61,22 +61,22 @@ public class ProductsController {
     @PostMapping
     public ResponseEntity<Object> createProduct(@RequestBody ProductsRequest productsRequest)
             throws ProductDuplicateException{
-        //Aca aplico la negrada que dije antes
+                System.out.println(productsRequest.getCategoryId());
+
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
-
         Product result = productService.createProduct(productsRequest.getName(), 
                                                     productsRequest.getDescription(), 
                                                     category,
                                                     productsRequest.getPrice(), 
                                                     productsRequest.getStock(), 
                                                     productsRequest.getImageUrl());
-
+                
         
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
-    @GetMapping("/category/{categoryId}/products")
+    @GetMapping("/categories/{categoryId}/products")
     public ResponseEntity<Page<Product>> getProductsByCategory(
         @RequestParam(required = false) Integer page,
         @RequestParam(required = false) Integer size,
@@ -102,7 +102,7 @@ public class ProductsController {
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
         throws ProductNotFoundException {
-        //Aplico la negrada una vez mas
+        
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 

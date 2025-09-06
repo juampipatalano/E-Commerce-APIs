@@ -41,6 +41,7 @@ public class Product {
     private String description;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @JsonBackReference
     private Category category;
