@@ -43,6 +43,7 @@ public class Product {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JsonBackReference
     private Category category;
 
     @Column

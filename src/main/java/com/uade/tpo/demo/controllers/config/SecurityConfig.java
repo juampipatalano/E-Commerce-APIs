@@ -31,13 +31,14 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                
-                                .requestMatchers("/cart/**").hasRole("USER")
+                                .requestMatchers("/**").permitAll()
+                                /*                                 .requestMatchers("/cart/**").hasRole("USER")
                                 //CATEGORIAS
                                 
                                 .requestMatchers(HttpMethod.POST, "/categories").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA
-                                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+
+                                .requestMatchers(HttpMethod.GET, "/categories/**").permitAll() //permite visualizar categorías sin autenticación
+
 
                                 //PRODUCTOS
                                /* .requestMatchers(HttpMethod.POST, "/products").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA (igual poniendolo asi tampoco funciona, me voy a matar)
@@ -46,9 +47,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de productos
                                 .requestMatchers(HttpMethod.DELETE, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
                                 */
-                                .requestMatchers(HttpMethod.POST, "/products").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/products").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 
                                                 .anyRequest()
                                                 .authenticated())
