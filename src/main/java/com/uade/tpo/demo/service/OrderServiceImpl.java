@@ -43,16 +43,27 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, Double totalPrice, List<Long> productsId, Long userId) {
+    public Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, List<Long> productsId, Long userId) {
         Optional<User> resultUser = userRepository.findById(userId);
         if (resultUser.isEmpty()) {//NO EXISTE USUARIO CON DICHO ID
             throw new IllegalArgumentException("No se ha encontrado un usuario con el id: " + userId);
         }
         else{//ENCUENTRA EL USUARIO
+            //CALCULO EL PRECIO TOTAL DE LA ORDEN
+            Double totalPrice = 0.0;
+            for (Long productId: productsId) {
+                Optional<Product> resultProduct = productRepository.findById(productId);
+                Product product = resultProduct.get();
+                Double precio = product.getPrice();
+                totalPrice += precio;
+            }
+            
             User user = resultUser.get();
             Order order = new Order(date, totalPrice, shippingAddress, paymentMethod, user); //CREO LA ORDEN
-            orderRepository.save(order);
+            orderRepository.save(order); //GUARDO LA ORDEN
 
+
+            //RECORRO LA LISTA DE IDS DE PRODUCTOS PARA CREAR LOS DETALLES DE LA ORDEN
             for (Long productId : productsId) {
                 if (orderDetailRepository.getOrderDetailByOrderAndProductId(order.getId(), productId).isEmpty()){//NO ENCUENTRA REPETIDO EL DETALLE DE LA ORDEN
                     Optional<Product> resultProduct = productRepository.findById(productId);

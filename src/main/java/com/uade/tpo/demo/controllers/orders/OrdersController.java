@@ -44,7 +44,6 @@ public class OrdersController{
         Order result = orderService.createOrder(ordersRequest.getDate(), 
                                                 ordersRequest.getShippingAddress(), 
                                                 ordersRequest.getPaymentMethod(), 
-                                                ordersRequest.getTotalPrice(), 
                                                 ordersRequest.getProductsId(), 
                                                 ordersRequest.getUserId());
                                                 

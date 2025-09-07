@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 
 public interface OrderService {
     Optional<Order> getOrderById(Long id);
-    Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, Double totalPrice, List<Long> productsId, Long userId);
+    Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, List<Long> productsId, Long userId);
     Page<Order> getOrders(PageRequest pageRequest);
 
 }
