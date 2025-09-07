@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -41,7 +40,6 @@ public class Product {
     private String description;
 
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @JsonBackReference
     private Category category;
@@ -54,4 +52,11 @@ public class Product {
 
     @Column
     private String imageUrl;
+    public void decreaseStock(){
+        if (this.stock <= 0) {
+            throw new IllegalStateException("No hay stock disponible para el producto: " + this.name);
+        }else{
+        this.stock -= 1;
+        }
+    }
 }

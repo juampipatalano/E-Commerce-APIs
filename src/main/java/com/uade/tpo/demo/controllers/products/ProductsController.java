@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
-import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
 
-import java.lang.foreign.Linker.Option;
+
 import java.net.URI;
 import java.util.Optional;
 
@@ -36,7 +35,7 @@ public class ProductsController {
     private ProductService productService;
 
     @Autowired
-    private CategoryService categoryService; 
+    private CategoryService categoryService;
 
     @GetMapping
     public ResponseEntity<Page<Product>> getProducts(
@@ -61,8 +60,6 @@ public class ProductsController {
     @PostMapping
     public ResponseEntity<Object> createProduct(@RequestBody ProductsRequest productsRequest)
             throws ProductDuplicateException{
-                System.out.println(productsRequest.getCategoryId());
-
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
         Product result = productService.createProduct(productsRequest.getName(), 
@@ -102,7 +99,6 @@ public class ProductsController {
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
         throws ProductNotFoundException {
-        
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 

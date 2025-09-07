@@ -9,7 +9,6 @@ import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
-import org.springframework.data.domain.Page;
 
 public interface ProductService {
     
