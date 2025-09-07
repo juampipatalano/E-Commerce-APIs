@@ -1,5 +1,7 @@
 package com.uade.tpo.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,7 @@ public class Product {
     @Column
     private String description;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
@@ -51,6 +54,10 @@ public class Product {
     @Column
     private String imageUrl;
     public void decreaseStock(){
+        if (this.stock <= 0) {
+            throw new IllegalStateException("No hay stock disponible para el producto: " + this.name);
+        }else{
         this.stock -= 1;
+        }
     }
 }

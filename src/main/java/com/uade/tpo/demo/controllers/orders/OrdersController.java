@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.uade.tpo.demo.entity.Order;
 
 import com.uade.tpo.demo.service.OrderService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/orders")
@@ -48,17 +50,13 @@ public class OrdersController{
         return ResponseEntity.created(URI.create("/orders/" + result.getId())).body(result);
     }
 
-
-    
-    @DeleteMapping
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId){
-        
-        //orderService.deleteOrder(orderId);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public String getMethodName(@RequestParam String param) {
+        return new String();
     }
-
-
     
+
+
     
 
 }

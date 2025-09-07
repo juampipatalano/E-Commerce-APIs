@@ -38,8 +38,8 @@ public class OrderDetail{
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
-    @PrimaryKeyJoinColumn
-    @OneToOne
+   
+    @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 

@@ -17,6 +17,9 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.uade.tpo.demo.repository.OrderRepository;
 import com.uade.tpo.demo.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.uade.tpo.demo.repository.OrderDetailRepository;
 import com.uade.tpo.demo.repository.ProductRepository;
 
@@ -31,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     @Autowired
     private ProductRepository productRepository;
 
@@ -50,8 +53,9 @@ public class OrderServiceImpl implements OrderService {
 
     */ 
 
+    @Transactional
     public Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, Double totalPrice, List<Long> productsId, Long userId) {
-        Optional<User> resultUser = UserRepository.findById(userId);
+        Optional<User> resultUser = userRepository.findById(userId);
         if (resultUser.isEmpty()) {//NO EXISTE USUARIO CON DICHO ID
             throw new IllegalArgumentException("No se ha encontrado un usuario con el id: " + userId);
         }
@@ -68,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
                     orderDetailRepository.save(orderDetail);        //GUARDO EL DETALLE
 
-                   // order.getOrderDetails().add(orderDetail);       //AGREGO EL DETALLE AL LISTADO DE DETALLES DE LA ORDEN
+                
 
 
                     product.decreaseStock();                        //LE DESCUENTO EL STOCK
