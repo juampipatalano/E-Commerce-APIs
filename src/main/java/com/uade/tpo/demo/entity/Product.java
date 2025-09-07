@@ -50,4 +50,7 @@ public class Product {
 
     @Column
     private String imageUrl;
+    public void decreaseStock(){
+        this.stock -= 1;
+    }
 }
