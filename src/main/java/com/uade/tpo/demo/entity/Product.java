@@ -21,13 +21,15 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, Category category, Double price, Integer stock, String imageUrl) {
+    public Product(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount)
+ {
         this.name = name;
         this.description = description;
         this.category= category;
         this.price = price;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.discount = 0.0;
     }
 
     @Id
@@ -43,7 +45,7 @@ public class Product {
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @JsonBackReference
+    
     private Category category;
 
     @Column
@@ -54,4 +56,9 @@ public class Product {
 
     @Column
     private String imageUrl;
+
+    @Column
+    private Double discount;
+;
 }
+ 

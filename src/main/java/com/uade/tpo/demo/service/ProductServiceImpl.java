@@ -19,6 +19,7 @@ import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
 import com.uade.tpo.demo.repository.ProductRepository;
 
+
 @Service
 public class ProductServiceImpl implements ProductService {
  
@@ -26,30 +27,37 @@ public class ProductServiceImpl implements ProductService {
      private ProductRepository productRepository;
  
      @Override
-     public Page<Product> getProducts(PageRequest pageRequest) {
-         return productRepository.findAll(pageRequest);
+        public Page<Product> getProducts(PageRequest pageRequest) {//modificamos para que traiga solo los productos con stock 06/09
+         return productRepository.findInStock(pageRequest);
+         
      }
- 
+
      @Override
      public Optional<Product> getProductById(Long productId) {
-         return productRepository.findById(productId);
+         return productRepository.findByIdInStock(productId);//modificamos para que traiga solo los productos con stock 06/09
      }
  
+ 
+    @Transactional //agregamos esto 06/09
      @Override
-     public Product createProduct(String name, String description, Category category, Double price, Integer stock, String imageUrl) throws ProductDuplicateException {
+     public Product createProduct(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount) throws ProductDuplicateException {
             if(productRepository.findByName(name).isEmpty()) {
-                Product product = new Product(name, description, category, price, stock, imageUrl);
+                Product product = new Product(name, description, category, price, stock, imageUrl, discount);
                 return productRepository.save(product);
             }
             throw new ProductDuplicateException();
      }
     
-
 	 @Override
 	 public Page<Product> getProductsByCategory(Long categoryId, PageRequest pageRequest) {
         return productRepository.findByCategoryId (categoryId, pageRequest);
         
 	 }
+
+     @Override
+    public Page<Product> getProductsByPriceRange(Double minPrice, Double maxPrice, PageRequest pageRequest) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice, pageRequest);
+    }
 
 
     @Transactional
@@ -64,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Product updateProduct(Long productId, String name, String description, Category category, Double price, Integer stock,
-            String imageUrl) throws ProductNotFoundException { //XQ DICE THROWS... Y EL DE ARRIBA NO ?-ademas lo validamos dos veces (aca y en el controller)
+            String imageUrl, Double descuento) throws ProductNotFoundException { //XQ DICE THROWS... Y EL DE ARRIBA NO ?-ademas lo validamos dos veces (aca y en el controller)
         
         Optional<Product> productOpt= productRepository.findById(productId);
         if(productOpt.isPresent()){
@@ -76,17 +84,14 @@ public class ProductServiceImpl implements ProductService {
             product.setPrice (price);
             product.setStock (stock);
             product.setImageUrl (imageUrl);
+            product.setDiscount(descuento);
             
             return productRepository.save(product);
         }
 
         throw new ProductNotFoundException("El producto con id " + productId + " no existe");
 
-        
-        
     }
 
-	
 
- 
  }

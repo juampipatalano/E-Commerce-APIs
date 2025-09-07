@@ -49,7 +49,7 @@ public class ProductsController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId, PageRequest pageRequest) {
         Optional<Product> result = productService.getProductById(productId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
@@ -70,7 +70,8 @@ public class ProductsController {
                                                     category,
                                                     productsRequest.getPrice(), 
                                                     productsRequest.getStock(), 
-                                                    productsRequest.getImageUrl());
+                                                    productsRequest.getImageUrl(),
+                                                    productsRequest.getDiscount());
                 
         
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
@@ -88,10 +89,12 @@ public class ProductsController {
     
     }
 
+
+
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId) 
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId, PageRequest pageRequest) 
         throws ProductNotFoundException {
-        Optional<Product> result = productService.getProductById(productId);
+       Optional<Product>result = productService.getProductById(productId);
         if (result.isPresent()){
             productService.deleteProduct(productId);
             return ResponseEntity.ok().build();
@@ -100,7 +103,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest, PageRequest pageRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
         throws ProductNotFoundException {
         
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
@@ -114,14 +117,15 @@ public class ProductsController {
                                                                 category,
                                                                 productsRequest.getPrice(), 
                                                                 productsRequest.getStock(), 
-                                                                productsRequest.getImageUrl());
+                                                                productsRequest.getImageUrl(),
+                                                                productsRequest.getDiscount());
             ResponseEntity.ok(updatedProduct);
         }
         throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
 
     }
 
-
+   
 
 
 

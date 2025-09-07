@@ -11,5 +11,5 @@ public class ProductsRequest {
     private Double price;
     private Integer stock;
     private String imageUrl;
-   
+    private Double discount;
 }
