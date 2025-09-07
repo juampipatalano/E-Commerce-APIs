@@ -9,7 +9,6 @@ import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
 
 import java.net.URI;
 import java.util.Optional;

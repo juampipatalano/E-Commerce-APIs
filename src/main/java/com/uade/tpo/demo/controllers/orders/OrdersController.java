@@ -3,8 +3,8 @@ package com.uade.tpo.demo.controllers.orders;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +17,7 @@ import com.uade.tpo.demo.entity.Order;
 
 import com.uade.tpo.demo.service.OrderService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 
 @RestController
@@ -51,8 +52,16 @@ public class OrdersController{
     }
 
     @GetMapping
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    public ResponseEntity<Page<Order>> getOrders(
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size){
+            if (page == null || size == null) {
+                return ResponseEntity.ok(orderService.getOrders(PageRequest.of(0, Integer.MAX_VALUE)));
+                
+            }
+            else{
+                return ResponseEntity.ok(orderService.getOrders(PageRequest.of(page, size)));
+            }
     }
     
 

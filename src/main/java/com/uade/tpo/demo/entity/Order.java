@@ -14,9 +14,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Data
@@ -55,6 +59,7 @@ public class Order {
     @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetails;
+    @JsonManagedReference
+    @OneToMany (mappedBy = "order")
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 }

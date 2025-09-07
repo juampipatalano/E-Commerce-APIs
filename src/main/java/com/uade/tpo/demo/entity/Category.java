@@ -35,5 +35,5 @@ public class Category {
 
     @JsonManagedReference
     @OneToMany (mappedBy = "category")
-    private List<Product> products;  //TODO: cuando se crea un producto se debe guardar en esta tabla apuntando a su correspondiente categoría
+    private List<Product> products;
 }

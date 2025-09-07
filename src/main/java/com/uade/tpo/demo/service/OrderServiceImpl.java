@@ -5,16 +5,14 @@ import com.uade.tpo.demo.entity.Order;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.OrderDetail;
 import com.uade.tpo.demo.entity.User;
-import com.uade.tpo.demo.controllers.orders.OrdersRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
 
-import java.time.LocalDate;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+
 import com.uade.tpo.demo.repository.OrderRepository;
 import com.uade.tpo.demo.repository.UserRepository;
 
@@ -42,17 +40,8 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Order> getOrderById(Long id) {
         return orderRepository.findById(id);
     }
-    @Override
-    public void deleteOrder(Long orderId, Long userId) {}
 
     @Override
-    /*FALTA:
-    CREAR USER REPOSITORY
-    CREAR ORDERDETAIL REPOSITORY (incluye crear los SELECT en la db para hacer el getOrderDetailByOrderAndProductId)
-    VER FUNCION DE INCREMENTAR CANTIDAD PARA LA ORDERDETAIL
-
-    */ 
-
     @Transactional
     public Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, Double totalPrice, List<Long> productsId, Long userId) {
         Optional<User> resultUser = userRepository.findById(userId);
@@ -71,10 +60,10 @@ public class OrderServiceImpl implements OrderService {
                     OrderDetail orderDetail = new OrderDetail(order, product, 1L); //CREO UN NUEVO DETALLE DE ORDEN
 
                     orderDetailRepository.save(orderDetail);        //GUARDO EL DETALLE
+                    
+                    order.getOrderDetails().add(orderDetail);       //AGREGO EL DETALLE A LA LISTA DE DETALLES DE LA ORDEN
 
                 
-
-
                     product.decreaseStock();                        //LE DESCUENTO EL STOCK
                     productRepository.save(product);                //GUARDO EL PRODUCTO CON EL STOCK ACTUALIZADO
                 }
@@ -98,6 +87,11 @@ public class OrderServiceImpl implements OrderService {
             return order;
         }
         
+    }
+
+    @Override
+    public Page<Order> getOrders(org.springframework.data.domain.PageRequest pageRequest) {
+        return orderRepository.findAll(pageRequest);
     }
     
 
