@@ -29,7 +29,7 @@ public class Product {
         this.price = price;
         this.stock = stock;
         this.imageUrl = imageUrl;
-        this.discount = 0.0;
+        this.discount = discount;
     }
 
     @Id

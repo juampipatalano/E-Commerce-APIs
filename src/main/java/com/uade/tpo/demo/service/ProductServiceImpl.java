@@ -36,9 +36,8 @@ public class ProductServiceImpl implements ProductService {
      public Optional<Product> getProductById(Long productId) {
          return productRepository.findByIdInStock(productId);//modificamos para que traiga solo los productos con stock 06/09
      }
- 
- 
-    @Transactional //agregamos esto 06/09
+     
+     @Transactional
      @Override
      public Product createProduct(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount) throws ProductDuplicateException {
             if(productRepository.findByName(name).isEmpty()) {
@@ -72,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Product updateProduct(Long productId, String name, String description, Category category, Double price, Integer stock,
-            String imageUrl, Double descuento) throws ProductNotFoundException { //XQ DICE THROWS... Y EL DE ARRIBA NO ?-ademas lo validamos dos veces (aca y en el controller)
+            String imageUrl, Double descuento) throws ProductNotFoundException { 
         
         Optional<Product> productOpt= productRepository.findById(productId);
         if(productOpt.isPresent()){

@@ -21,7 +21,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findByName(String name);*/
 
     @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.name = ?1")
-    Optional<Product> findByName(String name);//por que optional si puede haber varios productos con el mismo nombre?
+    Optional<Product> findByName(String name);
 
     @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.category.id = ?1")
     Page<Product> findByCategoryId(Long categoryId, PageRequest pageRequest);
@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     Optional<Product> findByIdInStock(Long productId);
 
     //filtrar productos por rango de precio
-    @Query("SELECT p FROM Product p WHERE p.stock > 0 and (p.price BETWEEN :minPrice AND :maxPrice)")// ver si funciona con parentesis
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 and (p.price BETWEEN :minPrice AND :maxPrice)")
     Page<Product> findByPriceBetween(Double minPrice, Double maxPrice, PageRequest pageRequest);
 
 }
