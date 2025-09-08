@@ -99,18 +99,21 @@ public class ProductsController {
 
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId, PageRequest pageRequest) 
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId)
         throws ProductNotFoundException {
        Optional<Product>result = productService.getProductById(productId);
         if (result.isPresent()){
             productService.deleteProduct(productId);
             return ResponseEntity.ok().build();
         }
-        throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
+        else{
+            throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
+        }
+        
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest, PageRequest pageRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
         throws ProductNotFoundException {
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
@@ -125,9 +128,12 @@ public class ProductsController {
                                                                 productsRequest.getStock(), 
                                                                 productsRequest.getImageUrl(),
                                                                 productsRequest.getDiscount());
-            ResponseEntity.ok(updatedProduct);
+            return(ResponseEntity.ok(updatedProduct));
         }
-        throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
+        else{
+            throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
+        }
+        
 
     }
 

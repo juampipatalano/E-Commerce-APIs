@@ -81,9 +81,10 @@ public class ProductServiceImpl implements ProductService {
             product.setDiscount(descuento);
             
             return productRepository.save(product);
+        } 
+        else{
+            throw new ProductNotFoundException("El producto con id " + productId + " no existe");
         }
-
-        throw new ProductNotFoundException("El producto con id " + productId + " no existe");
 
     }
 

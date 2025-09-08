@@ -31,9 +31,26 @@ public class SecurityConfig {
                 http
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**").permitAll() //PERMITO A TODOS A REGISTRARSE Y LOGUEARSE
+
+                                //CATEGORIAS
+                                .requestMatchers(HttpMethod.GET,"/categories").permitAll() //permite visualizar categorias sin autenticación
+                                .requestMatchers(HttpMethod.POST,"/categories").hasRole("ADMIN") //solo ADMIN puede crear categorias
                                 
-                        
+                                .requestMatchers(HttpMethod.GET,"/categories/{id}").permitAll() //permite visualizar detalles de una categoria sin autenticación
+                                .requestMatchers(HttpMethod.PUT,"/categories/{id}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de una categoria
+                                .requestMatchers(HttpMethod.DELETE,"/categories/{id}").hasRole("ADMIN") //solo ADMIN puede eliminar una categoria
+
+                                //PRODUCTOS
+                                .requestMatchers(HttpMethod.GET, "/products").permitAll() //permite visualizar productos sin autenticación
+                                .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN") //solo ADMIN puede crear productos
+
+                                .requestMatchers(HttpMethod.GET, "/products/{productId}").permitAll() //permite visualizar detalles de un producto sin autenticación
+                                .requestMatchers(HttpMethod.PUT, "/products/{productId}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de productos
+                                .requestMatchers(HttpMethod.DELETE, "/products/{productId}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
+
+                                .requestMatchers(HttpMethod.GET, "/products/by-price").permitAll() //permite visualizar productos por rango de precio sin autenticación
+
                                 //CATEGORIAS
                                 /*
                                 .requestMatchers(HttpMethod.POST, "/categories").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA

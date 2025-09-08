@@ -24,7 +24,7 @@ public class AuthenticationService {
 
         public AuthenticationResponse register(RegisterRequest request) {
                 if (request.getRole() == null) {
-                        request.setRole(com.uade.tpo.demo.entity.Role.USER);
+                        request.setRole(com.uade.tpo.demo.entity.Role.ROLE_USER);
                 }
                 var user = User.builder()
                                 .firstName(request.getFirstname())
