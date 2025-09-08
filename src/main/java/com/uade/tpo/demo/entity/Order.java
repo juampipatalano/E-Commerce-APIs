@@ -14,6 +14,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -49,9 +51,12 @@ public class Order {
     @Column
     private BigDecimal totalPrice;
 
+
+    @NotBlank
     @Column
     private String shippingAddress;
 
+    @NotBlank
     @Column
     private String paymentMethod;
 

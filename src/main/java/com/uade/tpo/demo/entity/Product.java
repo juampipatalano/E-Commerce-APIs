@@ -13,7 +13,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
+
 
 @Data
 @Entity
@@ -49,15 +52,20 @@ public class Product {
     @JsonBackReference
     private Category category;
 
+    @Positive
     @Column
     private BigDecimal price;
 
+    @Positive
     @Column
     private Integer stock;
 
     @Column
     private String imageUrl;
 
+
+    @Positive // mayor que 0
+    @DecimalMax(value = "1.0", inclusive = false) // menor que 1
     @Column
     private BigDecimal discount;
 ;

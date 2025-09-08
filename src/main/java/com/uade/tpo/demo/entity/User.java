@@ -18,6 +18,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,13 +37,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String email;
 
+    
+    
     private String password;
 
+    @NotBlank
     private String firstName;
 
-    @Column(nullable = false, unique = true)
+    
     private String lastName;
 
     @JsonManagedReference

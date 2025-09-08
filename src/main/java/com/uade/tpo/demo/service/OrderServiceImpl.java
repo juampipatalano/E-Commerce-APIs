@@ -56,9 +56,13 @@ public class OrderServiceImpl implements OrderService {
                 Optional<Product> resultProduct = productRepository.findById(productId);
                 Product product = resultProduct.get();
                 BigDecimal precio = product.getPrice();
-                BigDecimal descuento = product.getDiscount();
-                BigDecimal precioConDescuento = precio.multiply(BigDecimal.ONE.subtract(descuento));
-                totalPrice = totalPrice.add(precioConDescuento);
+                if (product.getDiscount() !=  null){
+                    BigDecimal descuento = product.getDiscount();
+                    BigDecimal precioConDescuento = precio.multiply(BigDecimal.ONE.subtract(descuento));
+                    totalPrice = totalPrice.add(precioConDescuento);
+                }else{
+                    totalPrice = totalPrice.add(precio);
+                }
             }
             
             User user = resultUser.get();
