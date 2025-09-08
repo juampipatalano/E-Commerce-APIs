@@ -84,19 +84,6 @@ public class ProductsController {
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
-    @GetMapping("/categories/{categoryId}/products")
-    public ResponseEntity<Page<Product>> getProductsByCategory(
-        @RequestParam(required = false) Integer page,
-        @RequestParam(required = false) Integer size,
-        @PathVariable Long categoryId){
-            if (page == null || size == null) {
-                return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(0, Integer.MAX_VALUE)));
-            }
-            return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(page, size)));
-    
-    }
-
-
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Product> deleteProduct(@PathVariable Long productId)
@@ -133,12 +120,32 @@ public class ProductsController {
         else{
             throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
         }
+
         
 
     }
 
+    @GetMapping("/sorted-by-price")
+    public ResponseEntity<Page<Product>> getProductsSortedByPrice(
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        PageRequest pageRequest;
+        if (page == null || size == null) {
+            pageRequest = PageRequest.of(0, Integer.MAX_VALUE,
+                    order.equalsIgnoreCase("desc")
+                            ? org.springframework.data.domain.Sort.by("price").descending()
+                            : org.springframework.data.domain.Sort.by("price").ascending());
+        } else {
+            pageRequest = PageRequest.of(page, size,
+                    order.equalsIgnoreCase("desc")
+                            ? org.springframework.data.domain.Sort.by("price").descending()
+                            : org.springframework.data.domain.Sort.by("price").ascending());
+        }
+        return ResponseEntity.ok(productService.getProducts(pageRequest));
+    }
+
    
-
-
 
 }

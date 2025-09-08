@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.demo.entity.Category;
+import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
-
+import com.uade.tpo.demo.service.ProductService;
 
 import java.net.URI;
 import java.util.Optional;
@@ -30,6 +31,9 @@ public class CategoriesController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping
     public ResponseEntity<Page<Category>> getCategories(
@@ -78,5 +82,18 @@ public class CategoriesController {
         throw new CategoryNotFoundException("La categoría no existe con id: " + categoryId);
 
     }
+
+    @GetMapping("/{categoryId}/products")
+    public ResponseEntity<Page<Product>> getProductsByCategory(
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size,
+        @PathVariable Long categoryId){
+            if (page == null || size == null) {
+                return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(0, Integer.MAX_VALUE)));
+            }
+            return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(page, size)));
+    
+    }
+
 
 }

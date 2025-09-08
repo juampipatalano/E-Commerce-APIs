@@ -11,6 +11,7 @@ import com.uade.tpo.demo.controllers.auth.RegisterRequest;
 import com.uade.tpo.demo.controllers.config.JwtService;
 import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
+import com.uade.tpo.demo.entity.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +25,7 @@ public class AuthenticationService {
 
         public AuthenticationResponse register(RegisterRequest request) {
                 if (request.getRole() == null) {
-                        request.setRole(com.uade.tpo.demo.entity.Role.ROLE_USER);
+                        request.setRole(Role.ROLE_USER);
                 }
                 var user = User.builder()
                                 .firstName(request.getFirstname())

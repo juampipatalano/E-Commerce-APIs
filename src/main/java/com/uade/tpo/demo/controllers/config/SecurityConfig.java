@@ -40,6 +40,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/categories/{id}").permitAll() //permite visualizar detalles de una categoria sin autenticación
                                 .requestMatchers(HttpMethod.PUT,"/categories/{id}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de una categoria
                                 .requestMatchers(HttpMethod.DELETE,"/categories/{id}").hasRole("ADMIN") //solo ADMIN puede eliminar una categoria
+                                .requestMatchers(HttpMethod.GET,"/categories/{categoryId}/products").permitAll() //permite visualizar productos de una categoria sin autenticación
+
 
                                 //PRODUCTOS
                                 .requestMatchers(HttpMethod.GET, "/products").permitAll() //permite visualizar productos sin autenticación
@@ -50,8 +52,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/products/{productId}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
 
                                 .requestMatchers(HttpMethod.GET, "/products/by-price").permitAll() //permite visualizar productos por rango de precio sin autenticación
-                                
+                                .requestMatchers(HttpMethod.GET, "/products/sorted-by-price").permitAll() //permite visualizar productos ordenados por precio sin autenticación
 
+                                
                                 //ORDENES
                                 .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN") //solo ADMIN puede ver todas las ordenes
                                 .requestMatchers(HttpMethod.POST, "/orders").hasRole("USER") //solo USER puede crear ordenes
