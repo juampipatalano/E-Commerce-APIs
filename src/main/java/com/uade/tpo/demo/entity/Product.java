@@ -1,6 +1,9 @@
 package com.uade.tpo.demo.entity;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +23,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount)
+    public Product(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount)
  {
         this.name = name;
         this.description = description;
@@ -43,11 +46,11 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    
+    @JsonBackReference
     private Category category;
 
     @Column
-    private Double price;
+    private BigDecimal price;
 
     @Column
     private Integer stock;
@@ -56,7 +59,7 @@ public class Product {
     private String imageUrl;
 
     @Column
-    private Double discount;
+    private BigDecimal discount;
 ;
     public void decreaseStock(){
         if (this.stock <= 0) {

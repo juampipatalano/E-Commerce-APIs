@@ -1,4 +1,5 @@
 package com.uade.tpo.demo.service;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
      
      @Transactional
      @Override
-     public Product createProduct(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount) throws ProductDuplicateException {
+     public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount) throws ProductDuplicateException {
             if(productRepository.findByName(name).isEmpty()) {
                 Product product = new Product(name, description, category, price, stock, imageUrl, discount);
                 return productRepository.save(product);
@@ -48,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 	 }
 
      @Override
-    public Page<Product> getProductsByPriceRange(Double minPrice, Double maxPrice, PageRequest pageRequest) {
+    public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest) {
         return productRepository.findByPriceBetween(minPrice, maxPrice, pageRequest);
     }
 
@@ -64,8 +65,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public Product updateProduct(Long productId, String name, String description, Category category, Double price, Integer stock,
-            String imageUrl, Double descuento) throws ProductNotFoundException { 
+    public Product updateProduct(Long productId, String name, String description, Category category, BigDecimal price, Integer stock,
+            String imageUrl, BigDecimal descuento) throws ProductNotFoundException { 
         
         Optional<Product> productOpt= productRepository.findById(productId);
         if(productOpt.isPresent()){

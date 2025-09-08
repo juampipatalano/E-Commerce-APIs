@@ -10,7 +10,7 @@ import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
 
-
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Optional;
 
@@ -57,7 +57,7 @@ public class ProductsController {
     }
 
     @GetMapping("/by-price")//AGREGOOOO
-    public ResponseEntity<Page<Product>> getProductsByPriceRange(@RequestParam Double minPrice, @RequestParam Double maxPrice,
+    public ResponseEntity<Page<Product>> getProductsByPriceRange(@RequestParam BigDecimal minPrice, @RequestParam BigDecimal maxPrice,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
 

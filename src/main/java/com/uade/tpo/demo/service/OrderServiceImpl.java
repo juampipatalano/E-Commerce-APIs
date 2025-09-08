@@ -7,6 +7,7 @@ import com.uade.tpo.demo.entity.OrderDetail;
 import com.uade.tpo.demo.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -50,12 +51,14 @@ public class OrderServiceImpl implements OrderService {
         }
         else{//ENCUENTRA EL USUARIO
             //CALCULO EL PRECIO TOTAL DE LA ORDEN
-            Double totalPrice = 0.0;
+            BigDecimal totalPrice = BigDecimal.ZERO;
             for (Long productId: productsId) {
                 Optional<Product> resultProduct = productRepository.findById(productId);
                 Product product = resultProduct.get();
-                Double precio = product.getPrice();
-                totalPrice += precio;
+                BigDecimal precio = product.getPrice();
+                BigDecimal descuento = product.getDiscount();
+                BigDecimal precioConDescuento = precio.multiply(BigDecimal.ONE.subtract(descuento));
+                totalPrice = totalPrice.add(precioConDescuento);
             }
             
             User user = resultUser.get();

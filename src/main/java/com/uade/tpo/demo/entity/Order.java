@@ -1,5 +1,6 @@
 package com.uade.tpo.demo.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -30,7 +31,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(LocalDate date, Double totalPrice, String shippingAddress, String paymentMethod, User user) {
+    public Order(LocalDate date, BigDecimal totalPrice, String shippingAddress, String paymentMethod, User user) {
         this.date = date;
         this.totalPrice = totalPrice;
         this.shippingAddress = shippingAddress;
@@ -46,7 +47,7 @@ public class Order {
     private LocalDate date;
 
     @Column
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column
     private String shippingAddress;
