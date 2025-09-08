@@ -50,20 +50,13 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/products/{productId}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
 
                                 .requestMatchers(HttpMethod.GET, "/products/by-price").permitAll() //permite visualizar productos por rango de precio sin autenticación
+                                
 
-                                //CATEGORIAS
-                                /*
-                                .requestMatchers(HttpMethod.POST, "/categories").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA
-                                */
-
-                                //PRODUCTOS
-                                /* 
-                                .requestMatchers(HttpMethod.POST, "/products").permitAll() //TODO: CORREGIR ERROR, LO CAMBIO A ADMIN Y NO FUNCIONA (igual poniendolo asi tampoco funciona, me voy a matar)
-                                .requestMatchers(HttpMethod.GET, "/products").permitAll() //permite visualizar productos sin autenticación
-                                .requestMatchers(HttpMethod.GET, "/products/{id}").permitAll() //permite visualizar detalles de un producto sin autenticación
-                                .requestMatchers(HttpMethod.PUT, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede modificar detalles de productos
-                                .requestMatchers(HttpMethod.DELETE, "/products/{id}").hasRole("ADMIN") //solo ADMIN puede eliminar productos
-                                */
+                                //ORDENES
+                                .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN") //solo ADMIN puede ver todas las ordenes
+                                .requestMatchers(HttpMethod.POST, "/orders").hasRole("USER") //solo USER puede crear ordenes
+                                
+                                .requestMatchers(HttpMethod.GET, "/orders/{orderId}").hasRole("ADMIN") //solo ADMIN puede ver detalles de una orden
                                                 .anyRequest()
                                                 .authenticated())
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
