@@ -48,7 +48,7 @@ public class ProductsController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {// sacamos el pageRequest
         Optional<Product> result = productService.getProductById(productId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
@@ -56,6 +56,16 @@ public class ProductsController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/by-price")//AGREGOOOO
+    public ResponseEntity<Page<Product>> getProductsByPriceRange(@RequestParam Double minPrice, @RequestParam Double maxPrice,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        if (page == null || size == null) {
+            return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice, PageRequest.of(0, Integer.MAX_VALUE)));
+        }
+        return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice, PageRequest.of(page, size)));
+    }
 
     @PostMapping
     public ResponseEntity<Object> createProduct(@RequestBody ProductsRequest productsRequest)
@@ -67,7 +77,8 @@ public class ProductsController {
                                                     category,
                                                     productsRequest.getPrice(), 
                                                     productsRequest.getStock(), 
-                                                    productsRequest.getImageUrl());
+                                                    productsRequest.getImageUrl(),
+                                                    productsRequest.getDiscount());
                 
         
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
@@ -85,10 +96,12 @@ public class ProductsController {
     
     }
 
+
+
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId) 
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId, PageRequest pageRequest) 
         throws ProductNotFoundException {
-        Optional<Product> result = productService.getProductById(productId);
+       Optional<Product>result = productService.getProductById(productId);
         if (result.isPresent()){
             productService.deleteProduct(productId);
             return ResponseEntity.ok().build();
@@ -97,7 +110,7 @@ public class ProductsController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest, PageRequest pageRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
         throws ProductNotFoundException {
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
@@ -110,14 +123,15 @@ public class ProductsController {
                                                                 category,
                                                                 productsRequest.getPrice(), 
                                                                 productsRequest.getStock(), 
-                                                                productsRequest.getImageUrl());
+                                                                productsRequest.getImageUrl(),
+                                                                productsRequest.getDiscount());
             ResponseEntity.ok(updatedProduct);
         }
         throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
 
     }
 
-
+   
 
 
 

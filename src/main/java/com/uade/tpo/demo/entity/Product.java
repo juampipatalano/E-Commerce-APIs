@@ -20,13 +20,15 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, Category category, Double price, Integer stock, String imageUrl) {
+    public Product(String name, String description, Category category, Double price, Integer stock, String imageUrl, Double discount)
+ {
         this.name = name;
         this.description = description;
         this.category= category;
         this.price = price;
         this.stock = stock;
         this.imageUrl = imageUrl;
+        this.discount = discount;
     }
 
     @Id
@@ -41,7 +43,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    @JsonBackReference
+    
     private Category category;
 
     @Column
@@ -52,6 +54,10 @@ public class Product {
 
     @Column
     private String imageUrl;
+
+    @Column
+    private Double discount;
+;
     public void decreaseStock(){
         if (this.stock <= 0) {
             throw new IllegalStateException("No hay stock disponible para el producto: " + this.name);
@@ -60,3 +66,4 @@ public class Product {
         }
     }
 }
+ 
