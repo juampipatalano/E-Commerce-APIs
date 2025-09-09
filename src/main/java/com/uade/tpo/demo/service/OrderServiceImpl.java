@@ -53,15 +53,21 @@ public class OrderServiceImpl implements OrderService {
             //CALCULO EL PRECIO TOTAL DE LA ORDEN
             BigDecimal totalPrice = BigDecimal.ZERO;
             for (Long productId: productsId) {
-                Optional<Product> resultProduct = productRepository.findById(productId);
-                Product product = resultProduct.get();
-                BigDecimal precio = product.getPrice();
-                if (product.getDiscount() !=  null){
-                    BigDecimal descuento = product.getDiscount();
-                    BigDecimal precioConDescuento = precio.multiply(BigDecimal.ONE.subtract(descuento));
-                    totalPrice = totalPrice.add(precioConDescuento);
-                }else{
-                    totalPrice = totalPrice.add(precio);
+                Optional<Product> resultProduct = productRepository.findByIdInStock(productId);
+                if (resultProduct.isEmpty()) {//NO EXISTE PRODUCTO CON DICHO ID
+                    throw new IllegalArgumentException("No se ha encontrado un producto con el id: " + productId);
+                }
+                else{
+                    Product product = resultProduct.get();
+                    BigDecimal precio = product.getPrice();
+                    if (product.getDiscount() !=  null){
+                        BigDecimal descuento = product.getDiscount();
+                        BigDecimal precioConDescuento = precio.multiply(BigDecimal.ONE.subtract(descuento));
+                        totalPrice = totalPrice.add(precioConDescuento);
+                    }
+                    else{
+                        totalPrice = totalPrice.add(precio);
+                    }
                 }
             }
             
@@ -73,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
             //RECORRO LA LISTA DE IDS DE PRODUCTOS PARA CREAR LOS DETALLES DE LA ORDEN
             for (Long productId : productsId) {
                 if (orderDetailRepository.getOrderDetailByOrderAndProductId(order.getId(), productId).isEmpty()){//NO ENCUENTRA REPETIDO EL DETALLE DE LA ORDEN
-                    Optional<Product> resultProduct = productRepository.findById(productId);
+                    Optional<Product> resultProduct = productRepository.findByIdInStock(productId);
                     Product product = resultProduct.get();
                     OrderDetail orderDetail = new OrderDetail(order, product, 1L); //CREO UN NUEVO DETALLE DE ORDEN
 
