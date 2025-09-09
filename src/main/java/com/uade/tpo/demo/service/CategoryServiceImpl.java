@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.demo.entity.Category;
+import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.CategoryDuplicateException;
 import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.repository.CategoryRepository;
@@ -32,18 +33,30 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(rollbackFor = Throwable.class)
     public Category createCategory(String description) throws CategoryDuplicateException {
         List<Category> categories = categoryRepository.findByDescription(description);
-        if (categories.isEmpty())
+        if (categories.isEmpty()){
             return categoryRepository.save(new Category(description));
-        throw new CategoryDuplicateException();
+        }
+        else{
+            throw new CategoryDuplicateException();
+        }
     }
 
     @Transactional
     @Override
-    public void deleteCategory(Long id){
-        if(categoryRepository.findById(id) == null){
-            throw new CategoryNotFoundException("La categoría " + id + " no existe");
+    public void deleteCategory(Long categoryId) throws CategoryNotFoundException {
+        Optional<Category> result = categoryRepository.findById(categoryId);
+        if(result == null){
+            throw new CategoryNotFoundException("La categoría " + categoryId + " no existe");
         }
-        categoryRepository.deleteById(id);
+        else{//Necesito la categoria en mi db debido a que está relacionado con productos, no puedo eliminarla. Se setea en false.
+            Category categoria = result.get();
+            categoria.setActive(false);
+            categoryRepository.save(categoria);
+            List<Product> productos = categoria.getProducts();
+            for(Product p : productos){
+                p.setActive(false);
+            }
+        }
     }
 
 
@@ -54,10 +67,6 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryOpt.isEmpty()) {
             throw new CategoryNotFoundException("La categoría " + categoryId + " no existe");
         }
-       /* List<Category> categories = categoryRepository.findByDescription(description);
-        if (!categories.isEmpty()) {
-            throw new CategoryDuplicateException();
-        }*/
         Category category = categoryOpt.get();
         category.setDescription(description);
         return categoryRepository.save(category);

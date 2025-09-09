@@ -68,7 +68,12 @@ public class Product {
     @DecimalMax(value = "1.0", inclusive = false) // menor que 1
     @Column
     private BigDecimal discount;
-;
+
+
+    @Column(nullable = false)
+    private Boolean active = true; //Se crea el producto siempre en estado activo
+
+
     public void decreaseStock(){
         if (this.stock <= 0) {
             throw new IllegalStateException("No hay stock disponible para el producto: " + this.name);

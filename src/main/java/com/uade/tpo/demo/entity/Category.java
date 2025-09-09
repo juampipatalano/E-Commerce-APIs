@@ -38,4 +38,7 @@ public class Category {
     @JsonManagedReference
     @OneToMany (mappedBy = "category")
     private List<Product> products;
+
+    @Column(nullable = false)
+    private boolean active = true; //se crea la categoria siempre en estado activo
 }

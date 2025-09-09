@@ -34,7 +34,8 @@ public class ProductServiceImpl implements ProductService {
      
      @Transactional
      @Override
-     public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount) throws ProductDuplicateException {
+     public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount) 
+     throws ProductDuplicateException {
             if(productRepository.findByName(name).isEmpty()) {
                 Product product = new Product(name, description, category, price, stock, imageUrl, discount);
                 return productRepository.save(product);
@@ -56,11 +57,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public void deleteProduct(Long id){
-        if(productRepository.findById(id) == null){
+    public void deleteProduct(Long id) throws ProductNotFoundException {
+        Optional<Product> result = productRepository.findById(id);
+        if( result == null){
             throw new ProductNotFoundException("El producto con " + id + " no existe");
         }
-        productRepository.deleteById(id);
+        else{//Necesito el producto en mi db debido a que está relacionado con los detalles de las órdenes 
+                                                //no puedo eliminarlo. Se setea en false.
+            Product producto = result.get();
+            producto.setActive(false);
+            productRepository.save(producto);
+        }
     }
 
     @Transactional
