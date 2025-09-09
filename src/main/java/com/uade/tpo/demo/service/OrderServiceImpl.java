@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order createOrder(LocalDate date, String shippingAddress, String paymentMethod, List<Long> productsId, Long userId) {
+    public Order createOrder(String shippingAddress, String paymentMethod, List<Long> productsId, Long userId) {
         Optional<User> resultUser = userRepository.findById(userId);
         if (resultUser.isEmpty()) {//NO EXISTE USUARIO CON DICHO ID
             throw new IllegalArgumentException("No se ha encontrado un usuario con el id: " + userId);
@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
             }
             
             User user = resultUser.get();
-            Order order = new Order(date, totalPrice, shippingAddress, paymentMethod, user); //CREO LA ORDEN
+            Order order = new Order(totalPrice, shippingAddress, paymentMethod, user); //CREO LA ORDEN
             orderRepository.save(order); //GUARDO LA ORDEN
 
 

@@ -35,6 +35,8 @@ public class CategoriesController {
     @Autowired
     private ProductService productService;
 
+
+
     @GetMapping
     public ResponseEntity<Page<Category>> getCategories(
             @RequestParam(required = false) Integer page,
@@ -43,6 +45,7 @@ public class CategoriesController {
             return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(0, Integer.MAX_VALUE)));
         return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
     }
+
 
     @GetMapping("/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
@@ -53,6 +56,7 @@ public class CategoriesController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PostMapping
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
@@ -62,26 +66,18 @@ public class CategoriesController {
 
 
     @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
-        Optional<Category> result = categoryService.getCategoryById(categoryId);
-        if (result.isPresent()){
-            categoryService.deleteCategory(categoryId);
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) throws CategoryNotFoundException {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok().build();
     }
 
+    
     @PutMapping("/{categoryId}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody CategoryRequest categoryRequest) throws CategoryNotFoundException {
-        Optional<Category> result = categoryService.getCategoryById(categoryId);
-        if (result.isPresent()) {
-            Category updatedCategory = categoryService.updateCategory(categoryId, categoryRequest.getDescription());
-            return ResponseEntity.ok(updatedCategory);
-        }
-
-        throw new CategoryNotFoundException("La categoría no existe con id: " + categoryId);
-
+        Category updatedCategory = categoryService.updateCategory(categoryId, categoryRequest.getDescription());
+        return ResponseEntity.ok(updatedCategory);
     }
+
 
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<Page<Product>> getProductsByCategory(
@@ -92,7 +88,6 @@ public class CategoriesController {
                 return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(0, Integer.MAX_VALUE)));
             }
             return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(page, size)));
-    
     }
 
 

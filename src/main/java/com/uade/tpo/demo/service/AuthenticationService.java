@@ -13,6 +13,8 @@ import com.uade.tpo.demo.entity.User;
 import com.uade.tpo.demo.repository.UserRepository;
 import com.uade.tpo.demo.entity.Role;
 
+import java.util.regex.Pattern;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,10 +25,19 @@ public class AuthenticationService {
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
 
+        private static final Pattern PASSWORD_PATTERN = Pattern.compile(
+        "^(?=.*[A-Z])(?=.*[!@#$%^&()_+\\-]).{6,20}$");
+
         public AuthenticationResponse register(RegisterRequest request) {
                 if (request.getRole() == null) {
                         request.setRole(Role.ROLE_USER);
                 }
+
+                if (!PASSWORD_PATTERN.matcher(request.getPassword()).matches()) { 
+                        throw new IllegalArgumentException(
+                "La contraseña debe tener entre 6 y 20 caracteres, al menos una mayúscula y un caracter especial.");
+        }
+
                 var user = User.builder()
                                 .firstName(request.getFirstname())
                                 .lastName(request.getLastname())

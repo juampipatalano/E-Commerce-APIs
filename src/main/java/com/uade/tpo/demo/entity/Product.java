@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
@@ -41,9 +42,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column
     private String name;
 
+    @NotBlank
     @Column
     private String description;
 
@@ -52,9 +55,11 @@ public class Product {
     @JsonBackReference
     private Category category;
 
+   
     @Positive
     @Column
     private BigDecimal price;
+
 
     @Positive
     @Column

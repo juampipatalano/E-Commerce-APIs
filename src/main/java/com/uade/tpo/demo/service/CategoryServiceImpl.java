@@ -23,11 +23,11 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     public Page<Category> getCategories(PageRequest pageable) {
-        return categoryRepository.findAll(pageable);
+        return categoryRepository.findAllActive(pageable);
     }
 
     public Optional<Category> getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId);
+        return categoryRepository.findActiveById(categoryId);
     }
 
     @Transactional(rollbackFor = Throwable.class)

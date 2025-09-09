@@ -33,8 +33,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(LocalDate date, BigDecimal totalPrice, String shippingAddress, String paymentMethod, User user) {
-        this.date = date;
+    public Order(BigDecimal totalPrice, String shippingAddress, String paymentMethod, User user) {
+        this.date = LocalDate.now();
         this.totalPrice = totalPrice;
         this.shippingAddress = shippingAddress;
         this.paymentMethod = paymentMethod;
