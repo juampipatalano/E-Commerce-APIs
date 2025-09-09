@@ -69,6 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         Category category = categoryOpt.get();
         category.setDescription(description);
+        category.setActive(true);
         return categoryRepository.save(category);
 
     }

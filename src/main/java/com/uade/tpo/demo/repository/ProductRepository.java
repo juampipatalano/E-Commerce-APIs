@@ -15,23 +15,20 @@ import io.jsonwebtoken.security.Jwks.OP;
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    /*@Query(value = "select p from Product p where p.name = ?1")
-    List<Product> findByName(String name);*/
-
     @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.name = ?1")
     Optional<Product> findByName(String name);
 
-    @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.category.id = ?1")
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.category.id = ?1 and p.active = true")
     Page<Product> findByCategoryId(Long categoryId, PageRequest pageRequest);
 
-    @Query("SELECT p FROM Product p WHERE p.stock > 0")
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.active=true")
     Page<Product> findInStock(PageRequest pageRequest);
 
-    @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.id = ?1")
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 and p.id = ?1 and p.active=true")
     Optional<Product> findByIdInStock(Long productId);
 
     //filtrar productos por rango de precio
-    @Query("SELECT p FROM Product p WHERE p.stock > 0 and (p.price BETWEEN :minPrice AND :maxPrice)")
+    @Query("SELECT p FROM Product p WHERE p.stock > 0 and (p.price BETWEEN :minPrice AND :maxPrice) and p.active = true")
     Page<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest);
 
 }

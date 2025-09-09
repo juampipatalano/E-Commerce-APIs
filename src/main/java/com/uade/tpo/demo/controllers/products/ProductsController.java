@@ -86,18 +86,14 @@ public class ProductsController {
 
 
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId)
-        throws ProductNotFoundException {
-       Optional<Product>result = productService.getProductById(productId);
-        if (result.isPresent()){
+    public ResponseEntity<Product> deleteProduct(@PathVariable Long productId) throws ProductNotFoundException{
+        
             productService.deleteProduct(productId);
             return ResponseEntity.ok().build();
         }
-        else{
-            throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
-        }
         
-    }
+        
+    
 
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
@@ -105,8 +101,7 @@ public class ProductsController {
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
-        Optional<Product> result = productService.getProductById(productId);
-        if (result.isPresent()) {
+       
             Product updatedProduct = productService.updateProduct(productId,
                                                                 productsRequest.getName(), 
                                                                 productsRequest.getDescription(), 
@@ -116,10 +111,8 @@ public class ProductsController {
                                                                 productsRequest.getImageUrl(),
                                                                 productsRequest.getDiscount());
             return(ResponseEntity.ok(updatedProduct));
-        }
-        else{
-            throw new ProductNotFoundException("Producto no encontrado con id: " + productId);
-        }
+        
+        
 
         
 
