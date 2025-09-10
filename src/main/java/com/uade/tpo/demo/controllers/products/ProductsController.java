@@ -48,7 +48,7 @@ public class ProductsController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {// sacamos el pageRequest
+    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> result = productService.getProductById(productId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
@@ -56,7 +56,7 @@ public class ProductsController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/by-price")//AGREGOOOO
+    @GetMapping("/by-price")
     public ResponseEntity<Page<Product>> getProductsByPriceRange(@RequestParam BigDecimal minPrice, @RequestParam BigDecimal maxPrice,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
@@ -96,7 +96,7 @@ public class ProductsController {
     
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) //le agregamos pageRequest a todo porque sino no anda 06/09
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
         throws ProductNotFoundException {
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));

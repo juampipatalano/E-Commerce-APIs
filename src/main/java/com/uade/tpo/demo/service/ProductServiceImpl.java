@@ -22,14 +22,14 @@ public class ProductServiceImpl implements ProductService {
      private ProductRepository productRepository;
  
      @Override
-        public Page<Product> getProducts(PageRequest pageRequest) {//modificamos para que traiga solo los productos con stock 06/09
+        public Page<Product> getProducts(PageRequest pageRequest) {//modificamos para que traiga solo los productos con stock 
          return productRepository.findInStock(pageRequest);
          
      }
 
      @Override
      public Optional<Product> getProductById(Long productId) {
-         return productRepository.findByIdInStock(productId);//modificamos para que traiga solo los productos con stock 06/09
+         return productRepository.findByIdInStock(productId);//modificamos para que traiga solo los productos con stock 
      }
      
      @Transactional
