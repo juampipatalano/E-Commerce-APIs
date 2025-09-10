@@ -32,7 +32,7 @@ public class Category {
     private Long id;
 
     @NotBlank
-    @Column
+    @Column(unique = true)
     private String description;
 
     @JsonManagedReference
