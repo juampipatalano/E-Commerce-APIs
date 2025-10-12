@@ -5,6 +5,8 @@ import com.uade.tpo.demo.entity.Order;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.entity.OrderDetail;
 import com.uade.tpo.demo.entity.User;
+import com.uade.tpo.demo.exceptions.ProductNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -55,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
             for (Long productId: productsId) {
                 Optional<Product> resultProduct = productRepository.findByIdInStock(productId);
                 if (resultProduct.isEmpty()) {//NO EXISTE PRODUCTO CON DICHO ID
-                    throw new IllegalArgumentException("No se ha encontrado un producto con el id: " + productId);
+                    throw new ProductNotFoundException("No se ha encontrado un producto con el id: " + productId);
                 }
                 else{
                     Product product = resultProduct.get();

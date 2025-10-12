@@ -11,8 +11,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+import java.util.Arrays;
 
 import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
 
@@ -29,6 +34,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req
                                 .requestMatchers("/api/v1/auth/**").permitAll() //PERMITO A TODOS A REGISTRARSE Y LOGUEARSE
@@ -67,5 +73,33 @@ public class SecurityConfig {
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
                 return http.build();
+        }
+        
+
+        @Bean
+        CorsConfigurationSource corsConfigurationSource() {
+                /* 
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Reemplaza con el origen de tu frontend
+                configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(List.of("*"));
+                configuration.setAllowCredentials(true);
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;*/
+
+                CorsConfiguration configuration = new CorsConfiguration();
+                // Aquí defines de qué URLs permites peticiones.
+                // Si usas Vite, el puerto es 5173.
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+                // Métodos HTTP permitidos (GET, POST, etc.)
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                // Headers permitidos (como Authorization para el token)
+                configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+                
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                // Aplicamos esta configuración a todas las rutas de tu API
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
         }
 }
