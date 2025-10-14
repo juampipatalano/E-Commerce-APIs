@@ -2,14 +2,18 @@ package com.uade.tpo.demo.controllers.products;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.uade.tpo.demo.controllers.responses.MessageResponse;
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
 import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Optional;
@@ -18,12 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 import com.uade.tpo.demo.service.ProductService;
 
@@ -68,8 +74,10 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createProduct(@RequestBody ProductsRequest productsRequest)
-            throws ProductDuplicateException{
+    public ResponseEntity<Object> createProduct(
+        @RequestPart("product") ProductsRequest productsRequest,
+        @RequestPart("image") MultipartFile imageFile)
+            throws ProductDuplicateException, IOException{
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
         Product result = productService.createProduct(productsRequest.getName(), 
@@ -77,11 +85,12 @@ public class ProductsController {
                                                     category,
                                                     productsRequest.getPrice(), 
                                                     productsRequest.getStock(), 
-                                                    productsRequest.getImageUrl(),
+                                                    imageFile.getBytes(),
                                                     productsRequest.getDiscount());
                 
-        
-        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
+
+        MessageResponse response = new MessageResponse("Se ha creado el producto de manera exitosa");  
+        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(response);
     }
 
 
@@ -96,8 +105,11 @@ public class ProductsController {
     
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductsRequest productsRequest) 
-        throws ProductNotFoundException {
+    public ResponseEntity<MessageResponse> updateProduct(
+        @PathVariable Long productId, 
+        @RequestPart("product") ProductsRequest productsRequest,
+        @RequestPart("image") MultipartFile imageFile) 
+        throws ProductNotFoundException, IOException{
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
@@ -108,9 +120,12 @@ public class ProductsController {
                                                                 category,
                                                                 productsRequest.getPrice(), 
                                                                 productsRequest.getStock(), 
-                                                                productsRequest.getImageUrl(),
+                                                                imageFile.getBytes(),
                                                                 productsRequest.getDiscount());
-            return(ResponseEntity.ok(updatedProduct));
+
+
+            MessageResponse response = new MessageResponse("Se ha actualizado el producto de manera exitosa");                                    
+            return(ResponseEntity.ok(response));
         
         
 

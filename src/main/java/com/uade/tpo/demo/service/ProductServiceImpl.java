@@ -34,10 +34,10 @@ public class ProductServiceImpl implements ProductService {
      
      @Transactional
      @Override
-     public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount) 
+     public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, byte[] image, BigDecimal discount) 
      throws ProductDuplicateException {
             if(productRepository.findByName(name).isEmpty()) {
-                Product product = new Product(name, description, category, price, stock, imageUrl, discount);
+                Product product = new Product(name, description, category, price, stock, image, discount);
                 return productRepository.save(product);
             }
             throw new ProductDuplicateException();
@@ -73,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public Product updateProduct(Long productId, String name, String description, Category category, BigDecimal price, Integer stock,
-            String imageUrl, BigDecimal descuento) throws ProductNotFoundException { 
+            byte[] image, BigDecimal descuento) throws ProductNotFoundException { 
         
         Optional<Product> productOpt= productRepository.findById(productId);
         if(productOpt.isPresent()){
@@ -84,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory (category);
             product.setPrice (price);
             product.setStock (stock);
-            product.setImageUrl (imageUrl);
+            product.setImage (image);
             product.setDiscount(descuento);
             product.setActive(true);
             

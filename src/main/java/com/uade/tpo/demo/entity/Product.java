@@ -1,6 +1,7 @@
 package com.uade.tpo.demo.entity;
 
 import java.math.BigDecimal;
+import java.util.Base64;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -11,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMax;
@@ -28,14 +30,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal discount)
+    public Product(String name, String description, Category category, BigDecimal price, Integer stock, byte[] image, BigDecimal discount)
  {
         this.name = name;
         this.description = description;
         this.category= category;
         this.price = price;
         this.stock = stock;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.discount = discount;
     }
 
@@ -66,8 +68,9 @@ public class Product {
     @Column
     private Integer stock;
 
-    @Column
-    private String imageUrl;
+    @Lob
+    @Column (columnDefinition = "LONGBLOB")
+    private byte[] image;
 
 
     @Positive // mayor que 0
@@ -86,6 +89,13 @@ public class Product {
         }else{
         this.stock -= 1;
         }
+    }
+
+    public String getImageBase64(){ //Cuando se envía el producto como JSON, la imagen se envía en Base64
+        if(this.image != null){
+            return Base64.getEncoder().encodeToString(this.image);
+        }
+        return null;
     }
 }
  

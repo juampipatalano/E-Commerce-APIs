@@ -17,9 +17,9 @@ public interface ProductService {
     
     public Page<Product> getProducts(PageRequest pageRequest);
     public Optional<Product> getProductById(Long productId);
-    public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal descuento) throws ProductDuplicateException;
+    public Product createProduct(String name, String description, Category category, BigDecimal price, Integer stock, byte[] image, BigDecimal descuento) throws ProductDuplicateException;
     public Page<Product> getProductsByCategory(Long categoryId, PageRequest pageRequest);
-    public Product updateProduct(Long productId, String name, String description, Category category, BigDecimal price, Integer stock, String imageUrl, BigDecimal descuento) throws ProductNotFoundException;
+    public Product updateProduct(Long productId, String name, String description, Category category, BigDecimal price, Integer stock, byte[] image, BigDecimal descuento) throws ProductNotFoundException;
     public void deleteProduct(Long productId) throws ProductNotFoundException;
     public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest) throws ProductNotFoundException;
     

@@ -11,6 +11,6 @@ public class ProductsRequest {
     private Long categoryId; // <-- solo el ID, luego busco dentro del controller a la categoria
     private BigDecimal price;
     private Integer stock;
-    private String imageUrl;
+    
     private BigDecimal discount;
 }
