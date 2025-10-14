@@ -2,6 +2,8 @@ package com.uade.tpo.demo.repository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.uade.tpo.demo.entity.Product;
 
 import io.jsonwebtoken.security.Jwks.OP;
+
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
@@ -30,6 +33,15 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     //filtrar productos por rango de precio
     @Query("SELECT p FROM Product p WHERE p.stock > 0 and (p.price BETWEEN :minPrice AND :maxPrice) and p.active = true")
     Page<Product> findByPriceBetween(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest);
+
+    @Query("""
+       SELECT p FROM Product p
+       WHERE p.active = true
+         AND p.stock > 0
+         AND p.discount IS NOT NULL
+         AND p.discount > 0
+       """)
+    Page<Product> findDiscountedInStock(PageRequest pageRequest);
 
 }
 
