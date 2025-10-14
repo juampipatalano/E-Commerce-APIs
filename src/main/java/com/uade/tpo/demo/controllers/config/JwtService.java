@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
@@ -33,9 +34,15 @@ public class JwtService {
     private String buildToken(
             UserDetails userDetails,
             long expiration) {
+
+        var authorities = userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .collect(Collectors.toList());
+        
         return Jwts
                 .builder()
                 .subject(userDetails.getUsername())
+                .claim("authorities", authorities)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey())
