@@ -99,5 +99,10 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    @Override
+    public Page<Product> getDiscountedProducts(PageRequest pageRequest) {
+    // Opción JPQL:
+    return productRepository.findDiscountedInStock(pageRequest);
+    }
 
  }

@@ -154,6 +154,18 @@ public class ProductsController {
         return ResponseEntity.ok(productService.getProducts(pageRequest));
     }
 
+    @GetMapping("/discounted")
+    public ResponseEntity<Page<Product>> getDiscountedProducts() {
+        // Orden descendente por descuento
+        PageRequest pageRequest = PageRequest.of(
+            0,                     // primera página
+            Integer.MAX_VALUE,     // todos los productos
+            org.springframework.data.domain.Sort.by("discount").descending()
+        );
+
+        return ResponseEntity.ok(productService.getDiscountedProducts(pageRequest));
+    }
+
    
 
 }

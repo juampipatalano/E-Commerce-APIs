@@ -22,8 +22,7 @@ public interface ProductService {
     public Product updateProduct(Long productId, String name, String description, Category category, BigDecimal price, Integer stock, byte[] image, BigDecimal descuento) throws ProductNotFoundException;
     public void deleteProduct(Long productId) throws ProductNotFoundException;
     public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest) throws ProductNotFoundException;
-    
-   
+    public Page<Product> getDiscountedProducts(PageRequest pageRequest);
 
 }
 
