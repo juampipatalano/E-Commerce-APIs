@@ -5,6 +5,7 @@ import java.util.Base64;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -57,6 +58,11 @@ public class Product {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @JsonBackReference
     private Category category;
+
+    @JsonProperty("categoryId")
+    public Long getCategoryId() {
+        return (this.category != null) ? this.category.getId() : null;
+    }
 
    
     @Positive
