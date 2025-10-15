@@ -108,19 +108,19 @@ public class ProductsController {
     public ResponseEntity<MessageResponse> updateProduct(
         @PathVariable Long productId, 
         @RequestPart("product") ProductsRequest productsRequest,
-        @RequestPart("image") MultipartFile imageFile) 
+        @RequestPart(value = "image", required = false) MultipartFile imageFile) 
         throws ProductNotFoundException, IOException{
         Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
             .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
 
-       
+            byte[] imageBytes = (imageFile != null && !imageFile.isEmpty()) ? imageFile.getBytes() : null;
             Product updatedProduct = productService.updateProduct(productId,
                                                                 productsRequest.getName(), 
                                                                 productsRequest.getDescription(), 
                                                                 category,
                                                                 productsRequest.getPrice(), 
                                                                 productsRequest.getStock(), 
-                                                                imageFile.getBytes(),
+                                                                imageBytes,
                                                                 productsRequest.getDiscount());
 
 

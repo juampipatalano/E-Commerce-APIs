@@ -84,9 +84,12 @@ public class ProductServiceImpl implements ProductService {
             product.setCategory (category);
             product.setPrice (price);
             product.setStock (stock);
-            product.setImage (image);
             product.setDiscount(descuento);
             product.setActive(true);
+
+            if(image != null){
+                product.setImage(image);
+            }
             
             return productRepository.save(product);
         } 
