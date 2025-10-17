@@ -166,6 +166,16 @@ public class ProductsController {
         return ResponseEntity.ok(productService.getDiscountedProducts(pageRequest));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Page<Product>> getAllProducts(
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size){
+            if (page == null || size == null) {
+                return ResponseEntity.ok(productService.getAllProducts(PageRequest.of(0, Integer.MAX_VALUE)));
+            }
+            return ResponseEntity.ok(productService.getAllProducts(PageRequest.of(page, size)));
+    }
+
    
 
 }
