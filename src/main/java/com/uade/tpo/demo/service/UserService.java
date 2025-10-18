@@ -7,6 +7,7 @@ import com.uade.tpo.demo.entity.Order;
 import java.util.List;
 
 public interface UserService {
+    List<User> getAllUsers();
     Optional<User> getUserByEmail(String email);
     User updateUser(String email, UserRequest userRequest);
     List<Order> getUserOrders(String email);

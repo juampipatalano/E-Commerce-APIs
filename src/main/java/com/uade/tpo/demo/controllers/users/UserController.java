@@ -35,6 +35,11 @@ public class UserController {
         return authentication.getName();
     }
 
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers(){
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
 
     @GetMapping("/profile")
     public ResponseEntity<User> getUserProfile(){

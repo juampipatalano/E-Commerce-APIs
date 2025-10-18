@@ -21,6 +21,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private OrderRepository orderRepository;
 
+    
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
     @Override
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
