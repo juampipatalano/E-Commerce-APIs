@@ -20,4 +20,8 @@ public interface CategoryService {
 
     public void deleteCategory(Long categoryId);
     public Category updateCategory(Long categoryId, String description) throws CategoryNotFoundException;
+
+    public Page<Category> getAllCategories(PageRequest pageRequest);
+
+    public Optional<Category> getCategoryByIdEvenInactive(Long categoryId);
 }

@@ -74,4 +74,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
+    @Override
+    public Page<Category> getAllCategories(PageRequest pageRequest) {
+        return categoryRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public Optional<Category> getCategoryByIdEvenInactive(Long categoryId) {
+        return categoryRepository.findById(categoryId);
+    }
+
 }
