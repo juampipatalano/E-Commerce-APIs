@@ -90,5 +90,15 @@ public class CategoriesController {
             return ResponseEntity.ok(productService.getProductsByCategory(categoryId, PageRequest.of(page, size)));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<Page<Category>> getAllCategories(
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size){
+            if (page == null || size == null) {
+                return ResponseEntity.ok(categoryService.getAllCategories(PageRequest.of(0, Integer.MAX_VALUE)));
+            }
+            return ResponseEntity.ok(categoryService.getAllCategories(PageRequest.of(page, size)));
+    }
+
 
 }

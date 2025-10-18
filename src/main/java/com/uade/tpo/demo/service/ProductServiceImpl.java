@@ -105,4 +105,9 @@ public class ProductServiceImpl implements ProductService {
     return productRepository.findDiscountedInStock(pageRequest);
     }
 
+    @Override
+    public Page<Product> getAllProducts(PageRequest pageRequest) {
+        return productRepository.findAll(pageRequest);
+    }
+
  }

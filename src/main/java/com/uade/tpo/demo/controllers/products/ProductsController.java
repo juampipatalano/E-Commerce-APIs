@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.uade.tpo.demo.controllers.responses.MessageResponse;
 import com.uade.tpo.demo.entity.Category;
 import com.uade.tpo.demo.entity.Product;
+import com.uade.tpo.demo.exceptions.CategoryNotFoundException;
 import com.uade.tpo.demo.exceptions.ProductDuplicateException;
 import com.uade.tpo.demo.exceptions.ProductNotFoundException;
 import com.uade.tpo.demo.service.CategoryService;
@@ -109,9 +110,15 @@ public class ProductsController {
         @PathVariable Long productId, 
         @RequestPart("product") ProductsRequest productsRequest,
         @RequestPart(value = "image", required = false) MultipartFile imageFile) 
-        throws ProductNotFoundException, IOException{
-        Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
-            .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+        throws ProductNotFoundException, IOException, CategoryNotFoundException{
+        /*Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
+            .orElseThrow(() -> new CategoryNotFoundException ("Categoría no encontrada"));*/
+        Optional<Category> result = categoryService.getCategoryByIdEvenInactive(productsRequest.getCategoryId());
+        Category category= result.get();
+
+        if(!category.isActive()){
+            throw new CategoryNotFoundException("La categoría " + productsRequest.getCategoryId() + " no existe");
+        }
 
             byte[] imageBytes = (imageFile != null && !imageFile.isEmpty()) ? imageFile.getBytes() : null;
             Product updatedProduct = productService.updateProduct(productId,
@@ -164,6 +171,16 @@ public class ProductsController {
         );
 
         return ResponseEntity.ok(productService.getDiscountedProducts(pageRequest));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Page<Product>> getAllProducts(
+        @RequestParam(required = false) Integer page,
+        @RequestParam(required = false) Integer size){
+            if (page == null || size == null) {
+                return ResponseEntity.ok(productService.getAllProducts(PageRequest.of(0, Integer.MAX_VALUE)));
+            }
+            return ResponseEntity.ok(productService.getAllProducts(PageRequest.of(page, size)));
     }
 
    
