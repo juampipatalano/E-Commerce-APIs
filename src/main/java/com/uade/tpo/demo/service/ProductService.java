@@ -23,6 +23,7 @@ public interface ProductService {
     public void deleteProduct(Long productId) throws ProductNotFoundException;
     public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest) throws ProductNotFoundException;
     public Page<Product> getDiscountedProducts(PageRequest pageRequest);
+    public Page<Product> getAllProducts(PageRequest pageRequest);
 
 }
 

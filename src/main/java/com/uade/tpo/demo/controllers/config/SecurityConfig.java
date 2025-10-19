@@ -63,6 +63,8 @@ public class SecurityConfig {
                                 //Mail
                                 .requestMatchers(HttpMethod.POST, "/api/mail/sendMessage").permitAll() //permite enviar mails sin autenticación
                                 
+                                .requestMatchers(HttpMethod.GET, "/products/all").hasRole("ADMIN") //solo ADMIN puede ver todos los productos, incluso los sin stock e inactivos
+
                                 //ORDENES
                                 .requestMatchers(HttpMethod.GET, "/orders").hasRole("ADMIN") //solo ADMIN puede ver todas las ordenes
                                 .requestMatchers(HttpMethod.POST, "/orders").hasRole("USER") //solo USER puede crear ordenes
