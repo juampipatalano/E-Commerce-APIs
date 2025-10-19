@@ -60,6 +60,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/products/by-price").permitAll() //permite visualizar productos por rango de precio sin autenticación
                                 .requestMatchers(HttpMethod.GET, "/products/sorted-by-price").permitAll() //permite visualizar productos ordenados por precio sin autenticación
                                 .requestMatchers(HttpMethod.GET, "/products/discounted").permitAll() //permite visualizar productos con descuento sin autenticación
+                                //Mail
+                                .requestMatchers(HttpMethod.POST, "/api/mail/sendMessage").permitAll() //permite enviar mails sin autenticación
+                                
                                 .requestMatchers(HttpMethod.GET, "/products/all").hasRole("ADMIN") //solo ADMIN puede ver todos los productos, incluso los sin stock e inactivos
 
                                 //ORDENES
