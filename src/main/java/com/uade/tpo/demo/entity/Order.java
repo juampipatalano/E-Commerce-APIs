@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity
@@ -64,6 +65,11 @@ public class Order {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonBackReference
     private User user;
+    @JsonProperty("userId")
+    public Long getUserId() {
+        return (this.user != null) ? this.user.getId() : null;
+    }
+    
 
     @JsonManagedReference
     @OneToMany (mappedBy = "order")
