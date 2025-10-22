@@ -82,27 +82,16 @@ public class SecurityConfig {
 
         @Bean
         CorsConfigurationSource corsConfigurationSource() {
-                /* 
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Reemplaza con el origen de tu frontend
-                configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                configuration.setAllowedHeaders(List.of("*"));
-                configuration.setAllowCredentials(true);
-                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                source.registerCorsConfiguration("/**", configuration);
-                return source;*/
-
-                CorsConfiguration configuration = new CorsConfiguration();
-                // Aquí defines de qué URLs permites peticiones.
-                // Si usas Vite, el puerto es 5173.
+                // Definimos de que URL permitimos peticiones.
                 configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
                 // Métodos HTTP permitidos (GET, POST, etc.)
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                // Headers permitidos (como Authorization para el token)
+                // Headers permitidos
                 configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
                 
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-                // Aplicamos esta configuración a todas las rutas de tu API
+                // Se aplica esta configuración a todas las rutas
                 source.registerCorsConfiguration("/**", configuration);
                 return source;
         }
