@@ -75,7 +75,7 @@ public class ProductsController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createProduct(
+    public ResponseEntity<Product> createProduct(
         @RequestPart("product") ProductsRequest productsRequest,
         @RequestPart("image") MultipartFile imageFile)
             throws ProductDuplicateException, IOException{
@@ -90,8 +90,9 @@ public class ProductsController {
                                                     productsRequest.getDiscount());
                 
 
-        MessageResponse response = new MessageResponse("Se ha creado el producto de manera exitosa");  
-        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(response);
+        //MessageResponse response = new MessageResponse("Se ha creado el producto de manera exitosa");  
+        //return ResponseEntity.created(URI.create("/products/" + result.getId())).body(response);
+        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
 
 
@@ -106,13 +107,11 @@ public class ProductsController {
     
 
     @PutMapping("/{productId}")
-    public ResponseEntity<MessageResponse> updateProduct(
+    public ResponseEntity<Product> updateProduct(
         @PathVariable Long productId, 
         @RequestPart("product") ProductsRequest productsRequest,
         @RequestPart(value = "image", required = false) MultipartFile imageFile) 
         throws ProductNotFoundException, IOException, CategoryNotFoundException{
-        /*Category category = categoryService.getCategoryById(productsRequest.getCategoryId())
-            .orElseThrow(() -> new CategoryNotFoundException ("Categoría no encontrada"));*/
         Optional<Category> result = categoryService.getCategoryByIdEvenInactive(productsRequest.getCategoryId());
         Category category= result.get();
 
@@ -131,13 +130,9 @@ public class ProductsController {
                                                                 productsRequest.getDiscount());
 
 
-            MessageResponse response = new MessageResponse("Se ha actualizado el producto de manera exitosa");                                    
-            return(ResponseEntity.ok(response));
-        
-        
-
-        
-
+            //MessageResponse response = new MessageResponse("Se ha actualizado el producto de manera exitosa");                                    
+            //return(ResponseEntity.ok(response));
+            return(ResponseEntity.ok(updatedProduct));
     }
 
     @GetMapping("/sorted-by-price")
