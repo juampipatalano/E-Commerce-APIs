@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Base64;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -76,6 +77,7 @@ public class Product {
 
     @Lob
     @Column (columnDefinition = "LONGBLOB")
+    @JsonIgnore
     private byte[] image;
 
 
