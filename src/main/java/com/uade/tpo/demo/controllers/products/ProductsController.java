@@ -135,7 +135,7 @@ public class ProductsController {
             return(ResponseEntity.ok(updatedProduct));
     }
 
-    @GetMapping("/sorted-by-price")
+   /* @GetMapping("/sorted-by-price")
     public ResponseEntity<Page<Product>> getProductsSortedByPrice(
             @RequestParam(defaultValue = "asc") String order,
             @RequestParam(required = false) Integer page,
@@ -154,6 +154,23 @@ public class ProductsController {
                             : org.springframework.data.domain.Sort.by("price").ascending());
         }
         return ResponseEntity.ok(productService.getProducts(pageRequest));
+    }*/
+
+    @GetMapping("/sorted-by-price")
+    public ResponseEntity<Page<Product>> getProductsSortedByPrice(
+            @RequestParam(defaultValue = "asc") String order,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+
+        // Configuramos paginación base (sin ordenamiento aquí, el orden lo pone la Query)
+        Integer pageNumber = (page != null) ? page : 0;
+        Integer pageSize = (size != null) ? size : Integer.MAX_VALUE;
+        
+        // Pasamos PageRequest.of normal (el sort lo maneja el repositorio)
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        // Llamamos al servicio nuevo
+        return ResponseEntity.ok(productService.getProductsSortedByPrice(order, pageRequest));
     }
 
     @GetMapping("/discounted")

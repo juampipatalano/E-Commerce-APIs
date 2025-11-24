@@ -110,4 +110,13 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageRequest);
     }
 
+    @Override
+    public Page<Product> getProductsSortedByPrice(String order, PageRequest pageRequest) {
+    if ("desc".equalsIgnoreCase(order)) {
+        return productRepository.findAllSortedByRealPriceDesc(pageRequest);
+    } else {
+        return productRepository.findAllSortedByRealPriceAsc(pageRequest);
+    }
+}
+
  }

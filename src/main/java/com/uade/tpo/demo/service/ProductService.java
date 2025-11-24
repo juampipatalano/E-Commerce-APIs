@@ -24,6 +24,8 @@ public interface ProductService {
     public Page<Product> getProductsByPriceRange(BigDecimal minPrice, BigDecimal maxPrice, PageRequest pageRequest) throws ProductNotFoundException;
     public Page<Product> getDiscountedProducts(PageRequest pageRequest);
     public Page<Product> getAllProducts(PageRequest pageRequest);
+    
+    public Page<Product> getProductsSortedByPrice(String order, PageRequest pageRequest);
 
 }
 
